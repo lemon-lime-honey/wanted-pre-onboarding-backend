@@ -16,15 +16,17 @@ class UserManager(BaseUserManager):
     
 
     def create_superuser(self, email, password, **extra_fields):
-         extra_fields.setdefault('is_staff', True)
-         extra_fields.setdefault('is_superuser', True)
-         extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
 
-         if not extra_fields.get('is_staff'):
+        if not extra_fields.get('is_staff'):
               raise ValueError(_('Superuser must have is_staff=True.'))
-         if not extra_fields.get('is_superuser'):
+        if not extra_fields.get('is_superuser'):
               raise ValueError(_('Superuser must have is_superuser=True.'))
-         return self.create_user(email, password, **extra_fields)
+
+        email = self.normalize_email(email)
+        return self.create_user(email=email, password=password, **extra_fields)
 
 
 class User(AbstractUser):

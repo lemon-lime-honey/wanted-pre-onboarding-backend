@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -9,6 +10,8 @@ class UserManager(BaseUserManager):
           if not email:
                raise ValueError(_('The Email must be set'))
           email = self.normalize_email(email)
+          if get_user_model().objects.filter(email=email):
+               raise ValueError(_('User with this Email already exists'))
           user = self.model(email=email, **extra_fields)
           user.set_password(password)
           user.save()
